@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mirrord-fastapi
+  labels:
+    app: mirrord-fastapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mirrord-fastapi
+  template:
+    metadata:
+      name: mirrord-fastapi
+      labels:
+        app: mirrord-fastapi
+    spec:
+      containers:
+        - name: mirrord-fastapi
+          image: vdksystem/mirrord-fastapi:v3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mirrord-fastapi
+  labels:
+    app: mirrord-fastapi
+spec:
+  selector:
+    app: mirrord-fastapi
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: ClusterIP
